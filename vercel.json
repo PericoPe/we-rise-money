@@ -39,6 +39,22 @@
       "continue": true
     },
     {
+      "src": "/auth.html",
+      "dest": "/auth.html"
+    },
+    {
+      "src": "/create-community.html",
+      "dest": "/create-community.html"
+    },
+    {
+      "src": "/community-member.html",
+      "dest": "/community-member.html"
+    },
+    {
+      "src": "/dashboard.html",
+      "dest": "/dashboard.html"
+    },
+    {
       "src": "/(.*)",
       "dest": "/$1",
       "headers": {
