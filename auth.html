@@ -5,7 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autenticación - We Rise Money</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 80px);
+            padding: 2rem;
+            background: var(--light-gray);
+        }
+
+        .auth-card {
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-header h2 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-header p {
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .auth-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .google-signin-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            color: var(--text-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .google-signin-button:hover {
+            background: var(--light-gray);
+        }
+
+        .google-signin-button img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--text-color);
+            opacity: 0.6;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .auth-divider span {
+            padding: 0 1rem;
+        }
+
+        .auth-info {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .auth-info a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .auth-info a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <header class="header">
@@ -27,7 +125,7 @@
         <div class="auth-card">
             <div class="auth-header">
                 <h2>Iniciar sesión con Google</h2>
-                <p>Para crear y gestionar tu comunidad</p>
+                <p>Para unirte a la comunidad</p>
             </div>
             
             <div class="auth-content">
@@ -79,21 +177,12 @@
                     const user = result.user;
                     console.log('Usuario autenticado:', user);
                     
-                    // Redirigir al dashboard o crear comunidad según la acción
+                    // Obtener la URL de redirección de los parámetros de la URL
                     const urlParams = new URLSearchParams(window.location.search);
-                    const action = urlParams.get('action');
+                    const redirectUrl = urlParams.get('redirect') || 'index.html';
                     
-                    if (action === 'signin') {
-                        // Pasar los datos del usuario como parámetros en la URL
-                        const userData = {
-                            name: user.displayName,
-                            email: user.email
-                        };
-                        const userDataString = encodeURIComponent(JSON.stringify(userData));
-                        window.location.href = `create-community.html?userData=${userDataString}`;
-                    } else {
-                        window.location.href = 'dashboard.html';
-                    }
+                    // Redirigir al usuario
+                    window.location.href = redirectUrl;
                 })
                 .catch((error) => {
                     console.error('Error de autenticación:', error);
