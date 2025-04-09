@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Comunidad - We Rise Money</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .stepwizard {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .stepwizard-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .stepwizard-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 1;
+        }
+
+        .stepwizard-step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .stepwizard-step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--white);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .stepwizard-step.active .stepwizard-step-number {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .stepwizard-step.completed .stepwizard-step-number {
+            background: var(--success-color);
+            border-color: var(--success-color);
+            color: var(--white);
+        }
+
+        .stepwizard-step-title {
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .stepwizard-step.active .stepwizard-step-title {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .stepwizard-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary {
+            background: var(--text-color);
+            color: var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .share-link {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            word-break: break-all;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .share-button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .whatsapp {
+            background: #25D366;
+        }
+
+        .copy {
+            background: #666;
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 2rem;
+            background: var(--light-gray);
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .success-message i {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .success-message p {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin: 0;
+        }
+
+        .next-steps {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .next-steps h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .next-steps ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .next-steps li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .next-steps li::before {
+            content: '✓';
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn-primary {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">
+                <h1>We Rise Money</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Inicio</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="stepwizard">
+        <div class="stepwizard-steps">
+            <div class="stepwizard-step active" data-step="1">
+                <div class="stepwizard-step-number">1</div>
+                <div class="stepwizard-step-title">Crear Comunidad</div>
+            </div>
+            <div class="stepwizard-step" data-step="2">
+                <div class="stepwizard-step-number">2</div>
+                <div class="stepwizard-step-title">Información Personal</div>
+            </div>
+            <div class="stepwizard-step" data-step="3">
+                <div class="stepwizard-step-number">3</div>
+                <div class="stepwizard-step-title">Detalles del Evento</div>
+            </div>
+            <div class="stepwizard-step" data-step="4">
+                <div class="stepwizard-step-number">4</div>
+                <div class="stepwizard-step-title">Compartir Comunidad</div>
+            </div>
+        </div>
+
+        <div class="stepwizard-content">
+            <!-- Paso 1: Crear Comunidad -->
+            <div id="step1" class="step-content">
+                <h2>Crear tu Comunidad</h2>
+                <div class="form-group">
+                    <label>Tipo de Comunidad</label>
+                    <select class="form-control" disabled>
+                        <option selected>Padres/Madres</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Institución</label>
+                    <input type="text" class="form-control" placeholder="Nombre de la institución">
+                </div>
+                <div class="form-group">
+                    <label>Sala o Grado</label>
+                    <input type="text" class="form-control" placeholder="Ej: 3er Grado">
+                </div>
+                <div class="form-group">
+                    <label>División</label>
+                    <input type="text" class="form-control" placeholder="Ej: A, B, C">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" disabled>Anterior</button>
+                    <button class="btn btn-primary" onclick="nextStep(1)">Siguiente</button>
+                </div>
+            </div>
+
+            <!-- Paso 2: Información Personal -->
+            <div id="step2" class="step-content hidden">
+                <h2>Información Personal</h2>
+                <div class="form-group">
+                    <label>Nombre del Hijo/a</label>
+                    <input type="text" class="form-control" placeholder="Nombre completo">
+                </div>
+                <div class="form-group">
+                    <label>Fecha de Nacimiento</label>
+                    <input type="date" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Tu Nombre</label>
+                    <input type="text" id="parentName" class="form-control" placeholder="Tu nombre completo">
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="tel" class="form-control" placeholder="+54 9 XXX XXX XXXX">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" class="form-control" placeholder="tu@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Alias de Mercado Pago</label>
+                    <input type="text" class="form-control" placeholder="Tu alias de MP">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="prevStep(2)">Anterior</button>
+                    <button class="btn btn-primary" onclick="nextStep(2)">Siguiente</button>
+                </div>
+            </div>
+
+            <!-- Paso 3: Detalles del Evento -->
+            <div id="step3" class="step-content hidden">
+                <h2>Detalles del Evento</h2>
+                <div class="form-group">
+                    <label>¿Vas a festejar el cumpleaños?</label>
+                    <select class="form-control" id="festejoSelect">
+                        <option value="si">Sí</option>
+                        <option value="no">No</option>
+                        <option value="no_se">No sé todavía</option>
+                    </select>
+                </div>
+                <div id="detallesFestejo" class="form-group">
+                    <div class="form-group">
+                        <label>Fecha del Evento</label>
+                        <input type="datetime-local" class="form-control" id="fechaEvento">
+                    </div>
+                    <div class="form-group">
+                        <label>Lugar</label>
+                        <input type="text" class="form-control" id="lugarEvento" placeholder="Dirección del evento">
+                    </div>
+                    <div class="form-group">
+                        <label>Observaciones</label>
+                        <textarea class="form-control" id="observacionesEvento" rows="3" placeholder="Información adicional sobre el evento"></textarea>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="prevStep(3)">Anterior</button>
+                    <button class="btn btn-primary" onclick="nextStep(3)">Finalizar</button>
+                </div>
+            </div>
+
+            <!-- Paso 4: Compartir Comunidad -->
+            <div id="step4" class="step-content hidden">
+                <h2>¡Comunidad Creada!</h2>
+                <div class="form-group">
+                    <label>Enlace para compartir</label>
+                    <div class="share-link">
+                        <input type="text" id="communityLink" readonly>
+                    </div>
+                </div>
+                <div class="share-buttons">
+                    <a href="#" id="shareWhatsApp" class="share-button whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        Compartir por WhatsApp
+                    </a>
+                    <button onclick="copyLink()" class="share-button copy">
+                        <i class="fas fa-copy"></i>
+                        Copiar Enlace
+                    </button>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="prevStep(4)">Anterior</button>
+                    <a href="dashboard.html" class="btn btn-primary">Ir al Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Obtener los datos del usuario de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const userDataString = urlParams.get('userData');
+        let userData = null;
+
+        if (userDataString) {
+            try {
+                userData = JSON.parse(decodeURIComponent(userDataString));
+                console.log('Datos del usuario:', userData);
+                
+                // Llenar los campos inmediatamente si los datos están disponibles
+                const parentNameInput = document.getElementById('parentName');
+                const emailInput = document.getElementById('email');
+                
+                if (parentNameInput && userData.name) {
+                    parentNameInput.value = userData.name;
+                }
+                
+                if (emailInput && userData.email) {
+                    emailInput.value = userData.email;
+                }
+            } catch (error) {
+                console.error('Error al parsear los datos del usuario:', error);
+            }
+        }
+
+        // Función para mostrar un paso específico
+        function showStep(stepNumber) {
+            // Ocultar todos los pasos
+            document.querySelectorAll('.step-content').forEach(step => {
+                step.classList.add('hidden');
+            });
+            
+            // Mostrar el paso solicitado
+            document.getElementById(`step${stepNumber}`).classList.remove('hidden');
+            
+            // Actualizar los indicadores de paso
+            document.querySelectorAll('.stepwizard-step').forEach(step => {
+                const stepNum = parseInt(step.getAttribute('data-step'));
+                if (stepNum < stepNumber) {
+                    step.classList.add('completed');
+                    step.classList.remove('active');
+                } else if (stepNum === stepNumber) {
+                    step.classList.add('active');
+                    step.classList.remove('completed');
+                } else {
+                    step.classList.remove('active', 'completed');
+                }
+            });
+        }
+
+        function nextStep(currentStep) {
+            if (currentStep === 1) {
+                showStep(2);
+            } else if (currentStep === 2) {
+                showStep(3);
+            } else if (currentStep === 3) {
+                showStep(4);
+                // Generar y mostrar el enlace automáticamente al llegar al paso 4
+                generateAndShowLink();
+            }
+        }
+
+        function prevStep(currentStep) {
+            showStep(currentStep - 1);
+        }
+
+        // Inicializar el formulario mostrando solo el paso 1
+        document.addEventListener('DOMContentLoaded', function() {
+            showStep(1); // Mostrar solo el paso 1 inicialmente
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const step = urlParams.get('step');
+            const communityId = urlParams.get('communityId');
+            
+            // Mostrar el paso 2 si se accede con step=2
+            if (step === '2') {
+                showStep(2);
+            } else if (step) {
+                showStep(parseInt(step));
+            }
+
+            // Si hay un communityId, podemos precargar la información de la comunidad
+            if (communityId) {
+                // Aquí podrías hacer una llamada a una API para obtener los detalles de la comunidad
+                // y precargar los campos del formulario
+            }
+        });
+
+        document.getElementById('festejoSelect').addEventListener('change', function(e) {
+            const detallesDiv = document.getElementById('detallesFestejo');
+            if (e.target.value === 'si') {
+                detallesDiv.style.display = 'block';
+            } else {
+                detallesDiv.style.display = 'none';
+            }
+        });
+
+        // Inicializar el estado de los detalles del festejo
+        document.addEventListener('DOMContentLoaded', function() {
+            const detallesDiv = document.getElementById('detallesFestejo');
+            const festejoSelect = document.getElementById('festejoSelect');
+            detallesDiv.style.display = festejoSelect.value === 'si' ? 'block' : 'none';
+        });
+
+        // Función para generar ID único
+        function generateUniqueId() {
+            const timestamp = Date.now().toString(36);
+            const random = Math.random().toString(36).substr(2, 5);
+            return `${timestamp}-${random}`;
+        }
+
+        // Función para generar y mostrar el enlace
+        function generateAndShowLink() {
+            // Obtener los datos de la comunidad
+            const institution = document.querySelector('#step1 input[placeholder="Nombre de la institución"]').value;
+            const grade = document.querySelector('#step1 input[placeholder="Ej: 3er Grado"]').value;
+            const division = document.querySelector('#step1 input[placeholder="Ej: A, B, C"]').value;
+            const parentName = document.getElementById('parentName').value;
+            
+            // Crear nombre de comunidad
+            const communityName = `${institution} - ${grade} ${division}`;
+            const communityId = generateUniqueId();
+            
+            // Actualizar el enlace en el input
+            const communityLink = `http://localhost:3000/we-rise-money/community-member.html?id=${communityId}`;
+            document.getElementById('communityLink').value = communityLink;
+        }
+
+        // Función para copiar el enlace
+        function copyLink() {
+            const linkInput = document.getElementById('communityLink');
+            linkInput.select();
+            document.execCommand('copy');
+            alert('¡Enlace copiado al portapapeles!');
+        }
+
+        // Función para compartir por WhatsApp
+        document.getElementById('shareWhatsApp').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Obtener el enlace actual
+            const communityLink = document.getElementById('communityLink').value;
+            const parentName = document.getElementById('parentName').value;
+            const institution = document.querySelector('#step1 input[placeholder="Nombre de la institución"]').value;
+            const grade = document.querySelector('#step1 input[placeholder="Ej: 3er Grado"]').value;
+            const division = document.querySelector('#step1 input[placeholder="Ej: A, B, C"]').value;
+            
+            // Crear nombre de comunidad
+            const communityName = `${institution} - ${grade} ${division}`;
+            
+            // Construir el mensaje
+            const message = encodeURIComponent(
+                `${parentName} te está invitando a sumarte a la comunidad "${communityName}" para que podamos organizar los cumples de los nenes. Únete aquí: ${communityLink}`
+            );
+            
+            // Abrir WhatsApp con el mensaje
+            window.open(`https://wa.me/?text=${message}`, '_blank');
+        });
+    </script>
+</body>
+</html> 

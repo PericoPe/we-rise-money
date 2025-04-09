@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unirse a la Comunidad - We Rise Money</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .stepwizard {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .stepwizard-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .stepwizard-steps::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 1;
+        }
+
+        .stepwizard-step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            flex: 1;
+        }
+
+        .stepwizard-step-number {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 2px solid var(--border-color);
+            margin: 0 auto 0.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .stepwizard-step-title {
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .stepwizard-step.completed .stepwizard-step-number {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .stepwizard-step.active .stepwizard-step-number {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .step-content {
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 10px;
+        }
+
+        .step-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--light-gray);
+            color: var(--text-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .invitation-message {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--light-gray);
+            border-radius: 5px;
+            font-size: 1.1rem;
+            color: var(--text-color);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">
+                <h1>We Rise Money</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Inicio</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="stepwizard">
+        <div class="stepwizard-steps">
+            <div class="stepwizard-step completed" data-step="1">
+                <div class="stepwizard-step-number">1</div>
+                <div class="stepwizard-step-title">Información Personal</div>
+            </div>
+            <div class="stepwizard-step active" data-step="2">
+                <div class="stepwizard-step-number">2</div>
+                <div class="stepwizard-step-title">Detalles del Evento</div>
+            </div>
+        </div>
+
+        <div class="stepwizard-content">
+            <div class="invitation-message">
+                <!-- El mensaje se actualizará dinámicamente con el nombre del invitador -->
+            </div>
+
+            <!-- Paso 2: Detalles del Evento -->
+            <div id="step2" class="step-content">
+                <h2>Detalles del Evento</h2>
+                <div class="form-group">
+                    <label>¿Vas a festejar el cumpleaños?</label>
+                    <select class="form-control" id="festejoSelect">
+                        <option value="si">Sí</option>
+                        <option value="no">No</option>
+                        <option value="no_se">No sé todavía</option>
+                    </select>
+                </div>
+                <div id="detallesFestejo" class="form-group">
+                    <div class="form-group">
+                        <label>Fecha del Evento</label>
+                        <input type="datetime-local" class="form-control" id="fechaEvento">
+                    </div>
+                    <div class="form-group">
+                        <label>Lugar</label>
+                        <input type="text" class="form-control" id="lugarEvento" placeholder="Dirección del evento">
+                    </div>
+                    <div class="form-group">
+                        <label>Observaciones</label>
+                        <textarea class="form-control" id="observacionesEvento" rows="3" placeholder="Información adicional sobre el evento"></textarea>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="submitForm()">Finalizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <!-- Firebase Authentication -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBmYOvxZW_XCP1IofYIOUAxz7c0AvMjwz8",
+            authDomain: "we-rise-money.firebaseapp.com",
+            projectId: "we-rise-money",
+            storageBucket: "we-rise-money.firebasestorage.app",
+            messagingSenderId: "93018409851",
+            appId: "1:93018409851:web:9122e1090d806bc8f88bde"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // Verificar si el usuario ya está autenticado
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Usuario ya autenticado, inicializar el stepwizard
+                initializeStepWizard({
+                    name: user.displayName,
+                    email: user.email
+                });
+            } else {
+                // Redirigir a la página de autenticación
+                window.location.href = 'auth.html?redirect=community-member.html' + window.location.search;
+            }
+        });
+
+        // Función para inicializar el stepwizard con los datos del usuario
+        function initializeStepWizard(userData) {
+            // Obtener el ID de la comunidad de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const communityId = urlParams.get('id');
+            
+            // Aquí puedes hacer una llamada a una API para obtener los detalles de la comunidad
+            // y el nombre del invitador
+            const inviterName = "JAVIER URSINO"; // Esto debería venir de la API
+            
+            // Actualizar el mensaje de invitación
+            const invitationMessage = document.querySelector('.invitation-message');
+            if (invitationMessage) {
+                invitationMessage.textContent = `${inviterName} te está invitando a unirte a su comunidad.`;
+            }
+        }
+
+        function submitForm() {
+            // Aquí iría la lógica para enviar el formulario
+            alert('¡Formulario enviado con éxito!');
+            window.location.href = 'dashboard.html';
+        }
+
+        // Inicializar el estado de los detalles del festejo
+        document.addEventListener('DOMContentLoaded', function() {
+            const detallesDiv = document.getElementById('detallesFestejo');
+            const festejoSelect = document.getElementById('festejoSelect');
+            
+            if (detallesDiv && festejoSelect) {
+                detallesDiv.style.display = festejoSelect.value === 'si' ? 'block' : 'none';
+                
+                festejoSelect.addEventListener('change', function(e) {
+                    detallesDiv.style.display = e.target.value === 'si' ? 'block' : 'none';
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

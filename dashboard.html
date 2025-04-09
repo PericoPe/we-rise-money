@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - We Rise Money</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">
+                <h1>We Rise Money</h1>
+            </div>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span class="hamburger"></span>
+            </button>
+            <div class="nav-links">
+                <a href="index.html">Inicio</a>
+                <a href="#" class="active">Dashboard</a>
+                <a href="#" class="cta-button">Cerrar sesión</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="dashboard">
+        <div class="dashboard-header">
+            <h1>Mi Dashboard</h1>
+            <p>Gestiona tus comunidades y eventos</p>
+        </div>
+
+        <div class="dashboard-cards">
+            <!-- Tarjeta de Comunidades -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2 class="card-title">Comunidades</h2>
+                    <i class="fas fa-plus card-action"></i>
+                </div>
+                <ul class="community-list">
+                    <li class="community-item">
+                        <div class="community-info">
+                            <div class="community-name">INA - SALA 3 ROJA</div>
+                            <div class="community-details">15 miembros</div>
+                        </div>
+                        <span class="community-status status-active">Activa</span>
+                    </li>
+                    <li class="community-item">
+                        <div class="community-info">
+                            <div class="community-name">COLEGIO SAN MARTÍN - 4TO A</div>
+                            <div class="community-details">20 miembros</div>
+                        </div>
+                        <span class="community-status status-inactive">Inactiva</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Tarjeta de Próximos Eventos -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2 class="card-title">Próximos Eventos</h2>
+                    <i class="fas fa-calendar-alt card-action"></i>
+                </div>
+                <div class="events-calendar">
+                    <div class="event-item">
+                        <div class="event-date">15 de Marzo</div>
+                        <div class="event-title">Cumpleaños de Juan</div>
+                        <div class="event-details">Meta: $5,000 - Recaudado: $3,500</div>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-date">20 de Marzo</div>
+                        <div class="event-title">Día del Maestro</div>
+                        <div class="event-details">Meta: $3,000 - Recaudado: $1,200</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta de Crear Eventos -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2 class="card-title">Crear Evento</h2>
+                    <i class="fas fa-plus-circle card-action"></i>
+                </div>
+                <div class="suggested-events">
+                    <div class="suggested-event">
+                        <div class="suggested-event-date">20 de Junio</div>
+                        <div class="suggested-event-title">Día de la Bandera</div>
+                        <div class="suggested-event-description">Celebración escolar</div>
+                    </div>
+                    <div class="suggested-event">
+                        <div class="suggested-event-date">11 de Septiembre</div>
+                        <div class="suggested-event-title">Día del Maestro</div>
+                        <div class="suggested-event-description">Homenaje a los docentes</div>
+                    </div>
+                    <div class="suggested-event">
+                        <div class="suggested-event-date">17 de Agosto</div>
+                        <div class="suggested-event-title">Paso a la Inmortalidad del Gral. San Martín</div>
+                        <div class="suggested-event-description">Acto escolar</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/community-data.js"></script>
+    <script>
+        // Menú Hamburguesa
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        const body = document.body;
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            body.classList.toggle('menu-open');
+        });
+
+        // Cerrar menú al hacer clic en un enlace
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+                body.classList.remove('menu-open');
+            });
+        });
+
+        // Lógica para crear nuevo evento
+        document.querySelectorAll('.card-action').forEach(action => {
+            action.addEventListener('click', function() {
+                const cardTitle = this.closest('.card-header').querySelector('.card-title').textContent;
+                if (cardTitle === 'Crear Evento') {
+                    window.location.href = 'create-community.html?step=3';
+                }
+            });
+        });
+
+        // Cargar datos de la comunidad
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const communityId = urlParams.get('id');
+            
+            if (communityId) {
+                window.communityData.updateDashboard(communityId);
+            }
+        });
+    </script>
+</body>
+</html> 

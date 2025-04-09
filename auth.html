@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autenticación - We Rise Money</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">
+                <h1>We Rise Money</h1>
+            </div>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span class="hamburger"></span>
+            </button>
+            <div class="nav-links">
+                <a href="index.html">Inicio</a>
+                <a href="#" class="active">Autenticación</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>Iniciar sesión con Google</h2>
+                <p>Para crear y gestionar tu comunidad</p>
+            </div>
+            
+            <div class="auth-content">
+                <button id="googleSignIn" class="google-signin-button">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                    Continuar con Google
+                </button>
+                
+                <div class="auth-divider">
+                    <span>o</span>
+                </div>
+                
+                <div class="auth-info">
+                    <p>Al iniciar sesión, aceptas nuestros <a href="#">Términos de servicio</a> y <a href="#">Política de privacidad</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <!-- Firebase Authentication -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBmYOvxZW_XCP1IofYIOUAxz7c0AvMjwz8",
+            authDomain: "we-rise-money.firebaseapp.com",
+            projectId: "we-rise-money",
+            storageBucket: "we-rise-money.firebasestorage.app",
+            messagingSenderId: "93018409851",
+            appId: "1:93018409851:web:9122e1090d806bc8f88bde"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // Manejar el inicio de sesión con Google
+        document.getElementById('googleSignIn').addEventListener('click', () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    // Usuario autenticado exitosamente
+                    const user = result.user;
+                    console.log('Usuario autenticado:', user);
+                    
+                    // Redirigir al dashboard o crear comunidad según la acción
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const action = urlParams.get('action');
+                    
+                    if (action === 'signin') {
+                        // Pasar los datos del usuario como parámetros en la URL
+                        const userData = {
+                            name: user.displayName,
+                            email: user.email
+                        };
+                        const userDataString = encodeURIComponent(JSON.stringify(userData));
+                        window.location.href = `create-community.html?userData=${userDataString}`;
+                    } else {
+                        window.location.href = 'dashboard.html';
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error de autenticación:', error);
+                    alert('Hubo un error al iniciar sesión. Por favor, intenta nuevamente.');
+                });
+        });
+
+        // Menú Hamburguesa
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        const body = document.body;
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            body.classList.toggle('menu-open');
+        });
+    </script>
+</body>
+</html> 
