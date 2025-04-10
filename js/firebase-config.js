@@ -1,4 +1,8 @@
-// Firebase configuration
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBmYOvxZW_XCP1IofYIOUAxz7c0AvMjwz8",
     authDomain: "we-rise-money.firebaseapp.com",
@@ -9,11 +13,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-// Initialize Firebase Authentication and get a reference to the service
-const auth = firebase.auth();
-const provider = new firebase.auth.GoogleAuthProvider();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
 // Configure Google provider
 provider.setCustomParameters({
@@ -22,4 +24,5 @@ provider.setCustomParameters({
 
 // Export auth and provider
 window.auth = auth;
-window.provider = provider; 
+window.provider = provider;
+window.signInWithPopup = signInWithPopup; 

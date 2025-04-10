@@ -182,13 +182,10 @@
         </div>
     </main>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="js/firebase-config.js"></script>
-    <script>
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module">
         // Manejar el inicio de sesión con Google
-        document.getElementById('googleSignIn').addEventListener('click', () => {
+        document.getElementById('googleSignIn').addEventListener('click', async () => {
             const errorMessage = document.getElementById('errorMessage');
             const loading = document.getElementById('loading');
             const signInButton = document.getElementById('googleSignIn');
@@ -197,45 +194,44 @@
             loading.style.display = 'block';
             signInButton.disabled = true;
 
-            auth.signInWithPopup(provider)
-                .then((result) => {
-                    // Usuario autenticado exitosamente
-                    const user = result.user;
-                    console.log('Usuario autenticado:', user);
-                    
-                    // Obtener la URL de redirección de los parámetros de la URL
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const redirectUrl = urlParams.get('redirect') || 'index.html';
-                    
-                    // Redirigir al usuario
-                    window.location.href = redirectUrl;
-                })
-                .catch((error) => {
-                    console.error('Error de autenticación:', error);
-                    
-                    // Mostrar mensaje de error específico
-                    let errorMessageText = 'Hubo un error al iniciar sesión. Por favor, intenta nuevamente.';
-                    
-                    switch (error.code) {
-                        case 'auth/popup-blocked':
-                            errorMessageText = 'El popup de inicio de sesión fue bloqueado. Por favor, permite los popups para este sitio.';
-                            break;
-                        case 'auth/popup-closed-by-user':
-                            errorMessageText = 'El popup de inicio de sesión fue cerrado. Por favor, intenta nuevamente.';
-                            break;
-                        case 'auth/network-request-failed':
-                            errorMessageText = 'Error de conexión. Por favor, verifica tu conexión a internet.';
-                            break;
-                        case 'auth/unauthorized-domain':
-                            errorMessageText = 'Este dominio no está autorizado. Por favor, contacta al administrador.';
-                            break;
-                    }
-                    
-                    errorMessage.textContent = errorMessageText;
-                    errorMessage.style.display = 'block';
-                    loading.style.display = 'none';
-                    signInButton.disabled = false;
-                });
+            try {
+                const result = await signInWithPopup(auth, provider);
+                // Usuario autenticado exitosamente
+                const user = result.user;
+                console.log('Usuario autenticado:', user);
+                
+                // Obtener la URL de redirección de los parámetros de la URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const redirectUrl = urlParams.get('redirect') || 'index.html';
+                
+                // Redirigir al usuario
+                window.location.href = redirectUrl;
+            } catch (error) {
+                console.error('Error de autenticación:', error);
+                
+                // Mostrar mensaje de error específico
+                let errorMessageText = 'Hubo un error al iniciar sesión. Por favor, intenta nuevamente.';
+                
+                switch (error.code) {
+                    case 'auth/popup-blocked':
+                        errorMessageText = 'El popup de inicio de sesión fue bloqueado. Por favor, permite los popups para este sitio.';
+                        break;
+                    case 'auth/popup-closed-by-user':
+                        errorMessageText = 'El popup de inicio de sesión fue cerrado. Por favor, intenta nuevamente.';
+                        break;
+                    case 'auth/network-request-failed':
+                        errorMessageText = 'Error de conexión. Por favor, verifica tu conexión a internet.';
+                        break;
+                    case 'auth/unauthorized-domain':
+                        errorMessageText = 'Este dominio no está autorizado. Por favor, contacta al administrador.';
+                        break;
+                }
+                
+                errorMessage.textContent = errorMessageText;
+                errorMessage.style.display = 'block';
+                loading.style.display = 'none';
+                signInButton.disabled = false;
+            }
         });
 
         // Menú Hamburguesa
