@@ -248,8 +248,12 @@
             <div class="logo">
                 <h1>We Rise Money</h1>
             </div>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span class="hamburger"></span>
+            </button>
             <div class="nav-links">
                 <a href="index.html">Inicio</a>
+                <a href="#" class="active">Crear Comunidad</a>
             </div>
         </nav>
     </header>
@@ -393,31 +397,23 @@
         </div>
     </main>
 
-    <script>
-        // Obtener los datos del usuario de la URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const userDataString = urlParams.get('userData');
-        let userData = null;
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="js/firebase-config.js"></script>
 
-        if (userDataString) {
-            try {
-                userData = JSON.parse(decodeURIComponent(userDataString));
-                console.log('Datos del usuario:', userData);
-                
-                // Llenar los campos inmediatamente si los datos están disponibles
-                const parentNameInput = document.getElementById('parentName');
-                const emailInput = document.getElementById('email');
-                
-                if (parentNameInput && userData.name) {
-                    parentNameInput.value = userData.name;
+    <script>
+        // Verificar si el usuario está autenticado
+        if (window.firebaseApp) {
+            window.firebaseApp.auth().onAuthStateChanged((user) => {
+                if (!user) {
+                    // Si no hay usuario autenticado, redirigir a la página de autenticación
+                    window.location.href = 'auth.html?action=signin';
                 }
-                
-                if (emailInput && userData.email) {
-                    emailInput.value = userData.email;
-                }
-            } catch (error) {
-                console.error('Error al parsear los datos del usuario:', error);
-            }
+            });
+        } else {
+            console.error('Firebase no está inicializado');
+            window.location.href = 'auth.html?action=signin';
         }
 
         // Función para mostrar un paso específico
@@ -463,24 +459,12 @@
 
         // Inicializar el formulario mostrando solo el paso 1
         document.addEventListener('DOMContentLoaded', function() {
-            showStep(1); // Mostrar solo el paso 1 inicialmente
+            showStep(1);
             
-            const urlParams = new URLSearchParams(window.location.search);
-            const step = urlParams.get('step');
-            const communityId = urlParams.get('communityId');
-            
-            // Mostrar el paso 2 si se accede con step=2
-            if (step === '2') {
-                showStep(2);
-            } else if (step) {
-                showStep(parseInt(step));
-            }
-
-            // Si hay un communityId, podemos precargar la información de la comunidad
-            if (communityId) {
-                // Aquí podrías hacer una llamada a una API para obtener los detalles de la comunidad
-                // y precargar los campos del formulario
-            }
+            // Inicializar el estado de los detalles del festejo
+            const detallesDiv = document.getElementById('detallesFestejo');
+            const festejoSelect = document.getElementById('festejoSelect');
+            detallesDiv.style.display = festejoSelect.value === 'si' ? 'block' : 'none';
         });
 
         document.getElementById('festejoSelect').addEventListener('change', function(e) {
@@ -490,13 +474,6 @@
             } else {
                 detallesDiv.style.display = 'none';
             }
-        });
-
-        // Inicializar el estado de los detalles del festejo
-        document.addEventListener('DOMContentLoaded', function() {
-            const detallesDiv = document.getElementById('detallesFestejo');
-            const festejoSelect = document.getElementById('festejoSelect');
-            detallesDiv.style.display = festejoSelect.value === 'si' ? 'block' : 'none';
         });
 
         // Función para generar ID único

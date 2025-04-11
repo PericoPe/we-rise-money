@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Autenticación - We Rise Money</title>
+    <title>We Rise Money - Iniciar Sesión</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .auth-container {
             display: flex;
@@ -29,7 +30,7 @@
             margin-bottom: 2rem;
         }
 
-        .auth-header h2 {
+        .auth-header h1 {
             color: var(--primary-color);
             margin-bottom: 0.5rem;
         }
@@ -88,19 +89,19 @@
             padding: 0 1rem;
         }
 
-        .auth-info {
+        .auth-links {
             text-align: center;
             font-size: 0.9rem;
             color: var(--text-color);
             opacity: 0.8;
         }
 
-        .auth-info a {
+        .auth-links a {
             color: var(--primary-color);
             text-decoration: none;
         }
 
-        .auth-info a:hover {
+        .auth-links a:hover {
             text-decoration: underline;
         }
 
@@ -154,29 +155,25 @@
     <main class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
-                <h2>Iniciar sesión con Google</h2>
-                <p>Para unirte a la comunidad</p>
+                <h1>We Rise Money</h1>
+                <p>Inicia sesión para crear o unirte a una comunidad</p>
             </div>
-            
             <div class="error-message" id="errorMessage"></div>
-            
             <div class="auth-content">
                 <button id="googleSignIn" class="google-signin-button">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo">
                     Continuar con Google
                 </button>
-                
                 <div class="loading" id="loading">
                     <div class="loading-spinner"></div>
                     <p>Iniciando sesión...</p>
                 </div>
-                
                 <div class="auth-divider">
                     <span>o</span>
                 </div>
-                
-                <div class="auth-info">
-                    <p>Al iniciar sesión, aceptas nuestros <a href="#">Términos de servicio</a> y <a href="#">Política de privacidad</a></p>
+                <div class="auth-links">
+                    <a href="#">Términos de Servicio</a>
+                    <a href="#">Política de Privacidad</a>
                 </div>
             </div>
         </div>
@@ -185,56 +182,84 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="js/firebase-config.js"></script>
-    <script>
-        // Manejar el inicio de sesión con Google
-        document.getElementById('googleSignIn').addEventListener('click', () => {
-            const errorMessage = document.getElementById('errorMessage');
-            const loading = document.getElementById('loading');
-            const signInButton = document.getElementById('googleSignIn');
-            
-            errorMessage.style.display = 'none';
-            loading.style.display = 'block';
-            signInButton.disabled = true;
 
-            auth.signInWithPopup(provider)
+    <script>
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyD8QJQJQJQJQJQJQJQJQJQJQJQJQJQJQJQ",
+            authDomain: "we-rise-money.firebaseapp.com",
+            projectId: "we-rise-money",
+            storageBucket: "we-rise-money.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdef1234567890abcdef"
+        };
+
+        // Función para verificar la configuración de Firebase
+        function validateFirebaseConfig(config) {
+            const requiredFields = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId'];
+            const missingFields = requiredFields.filter(field => !config[field]);
+            
+            if (missingFields.length > 0) {
+                throw new Error(`Configuración de Firebase incompleta. Faltan: ${missingFields.join(', ')}`);
+            }
+            
+            if (config.apiKey.includes('placeholder') || config.apiKey.length < 20) {
+                throw new Error('API Key de Firebase inválida');
+            }
+            
+            return true;
+        }
+
+        // Inicializar Firebase
+        let firebaseApp;
+        try {
+            validateFirebaseConfig(firebaseConfig);
+            
+            if (!firebase.apps.length) {
+                firebaseApp = firebase.initializeApp(firebaseConfig);
+                console.log('Firebase inicializado correctamente');
+            } else {
+                firebaseApp = firebase.app();
+                console.log('Firebase ya estaba inicializado');
+            }
+        } catch (error) {
+            console.error('Error al inicializar Firebase:', error);
+            showError('Error de configuración: ' + error.message);
+        }
+
+        // Verificar si hay un UID específico en la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const expectedUid = urlParams.get('uid');
+        
+        if (expectedUid) {
+            console.log('Verificando autenticación para UID:', expectedUid);
+            window.checkUserAuth(expectedUid)
+                .then(user => {
+                    console.log('Usuario verificado:', user);
+                    // Redirigir al dashboard o página correspondiente
+                    window.location.href = 'dashboard.html';
+                })
+                .catch(error => {
+                    console.error('Error de autenticación:', error);
+                    // Mostrar el formulario de autenticación
+                    document.getElementById('auth-container').style.display = 'flex';
+                });
+        }
+
+        // Configurar el proveedor de Google
+        const provider = new firebase.auth.GoogleAuthProvider();
+        
+        // Manejar el botón de inicio de sesión
+        document.getElementById('googleSignIn').addEventListener('click', () => {
+            firebase.auth().signInWithPopup(provider)
                 .then((result) => {
-                    // Usuario autenticado exitosamente
-                    const user = result.user;
-                    console.log('Usuario autenticado:', user);
-                    
-                    // Obtener la URL de redirección de los parámetros de la URL
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const redirectUrl = urlParams.get('redirect') || 'index.html';
-                    
-                    // Redirigir al usuario
-                    window.location.href = redirectUrl;
+                    console.log('Inicio de sesión exitoso:', result.user);
+                    // Redirigir al dashboard
+                    window.location.href = 'dashboard.html';
                 })
                 .catch((error) => {
-                    console.error('Error de autenticación:', error);
-                    
-                    // Mostrar mensaje de error específico
-                    let errorMessageText = 'Hubo un error al iniciar sesión. Por favor, intenta nuevamente.';
-                    
-                    switch (error.code) {
-                        case 'auth/popup-blocked':
-                            errorMessageText = 'El popup de inicio de sesión fue bloqueado. Por favor, permite los popups para este sitio.';
-                            break;
-                        case 'auth/popup-closed-by-user':
-                            errorMessageText = 'El popup de inicio de sesión fue cerrado. Por favor, intenta nuevamente.';
-                            break;
-                        case 'auth/network-request-failed':
-                            errorMessageText = 'Error de conexión. Por favor, verifica tu conexión a internet.';
-                            break;
-                        case 'auth/unauthorized-domain':
-                            errorMessageText = 'Este dominio no está autorizado. Por favor, contacta al administrador.';
-                            break;
-                    }
-                    
-                    errorMessage.textContent = errorMessageText;
-                    errorMessage.style.display = 'block';
-                    loading.style.display = 'none';
-                    signInButton.disabled = false;
+                    console.error('Error en el inicio de sesión:', error);
+                    alert('Error en el inicio de sesión: ' + error.message);
                 });
         });
 
@@ -243,11 +268,13 @@
         const navLinks = document.querySelector('.nav-links');
         const body = document.body;
 
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('active');
-            navLinks.classList.toggle('active');
-            body.classList.toggle('menu-open');
-        });
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener('click', () => {
+                menuToggle.classList.toggle('active');
+                navLinks.classList.toggle('active');
+                body.classList.toggle('menu-open');
+            });
+        }
     </script>
 </body>
 </html> 

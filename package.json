@@ -4,10 +4,15 @@
   "description": "Plataforma para crear comunidades y recaudar fondos para eventos especiales",
   "scripts": {
     "start": "live-server --port=3000",
-    "build": "echo 'No build step required'"
+    "build": "echo 'Building static files...'",
+    "vercel-build": "echo 'Building for Vercel...'",
+    "test": "echo 'No tests configured'"
   },
   "dependencies": {
     "live-server": "^1.2.2"
+  },
+  "devDependencies": {
+    "@vercel/static-build": "^1.0.0"
   },
   "engines": {
     "node": ">=14.x"

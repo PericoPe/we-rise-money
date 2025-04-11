@@ -1,28 +1,49 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
-
-// Firebase configuration
+// Configuración de Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyBmYOvxZW_XCP1IofYIOUAxz7c0AvMjwz8",
+    apiKey: "AIzaSyD8QJQJQJQJQJQJQJQJQJQJQJQJQJQJQJQ",
     authDomain: "we-rise-money.firebaseapp.com",
     projectId: "we-rise-money",
-    storageBucket: "we-rise-money.firebasestorage.app",
-    messagingSenderId: "93018409851",
-    appId: "1:93018409851:web:9122e1090d806bc8f88bde"
+    storageBucket: "we-rise-money.appspot.com",
+    messagingSenderId: "123456789012",
+    appId: "1:123456789012:web:abcdef1234567890abcdef"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
+// Inicializar Firebase
+let firebaseApp;
+try {
+    if (!firebase.apps.length) {
+        firebaseApp = firebase.initializeApp(firebaseConfig);
+        console.log('Firebase inicializado correctamente');
+    } else {
+        firebaseApp = firebase.app();
+        console.log('Firebase ya estaba inicializado');
+    }
+} catch (error) {
+    console.error('Error al inicializar Firebase:', error);
+}
 
-// Configure Google provider
-provider.setCustomParameters({
-    prompt: 'select_account'
-});
+// Exportar la instancia de Firebase
+window.firebaseApp = firebaseApp;
 
-// Export auth and provider
-window.auth = auth;
-window.provider = provider;
-window.signInWithPopup = signInWithPopup; 
+// Función para verificar la autenticación del usuario
+function checkUserAuth(uid) {
+    return new Promise((resolve, reject) => {
+        if (!firebaseApp) {
+            reject(new Error('Firebase no está inicializado'));
+            return;
+        }
+
+        firebaseApp.auth().onAuthStateChanged((user) => {
+            if (user && user.uid === uid) {
+                console.log('Usuario autenticado correctamente:', user.uid);
+                resolve(user);
+            } else {
+                console.error('Usuario no autenticado o UID no coincide');
+                reject(new Error('Usuario no autenticado'));
+            }
+        });
+    });
+}
+
+// Exportar funciones necesarias
+window.checkUserAuth = checkUserAuth; 

@@ -151,49 +151,32 @@
             <p>&copy; 2024 We Rise Money. Todos los derechos reservados.</p>
         </div>
     </footer>
+
     <script>
         // Menú Hamburguesa
         const menuToggle = document.querySelector('.menu-toggle');
         const navLinks = document.querySelector('.nav-links');
         const body = document.body;
 
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('active');
-            navLinks.classList.toggle('active');
-            body.classList.toggle('menu-open');
-        });
-
-        // Cerrar menú al hacer clic en un enlace
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                menuToggle.classList.remove('active');
-                navLinks.classList.remove('active');
-                body.classList.remove('menu-open');
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener('click', () => {
+                menuToggle.classList.toggle('active');
+                navLinks.classList.toggle('active');
+                body.classList.toggle('menu-open');
             });
-        });
-
-        // Función para generar ID único
-        function generateUniqueId() {
-            const timestamp = Date.now().toString(36);
-            const random = Math.random().toString(36).substr(2, 5);
-            return `${timestamp}-${random}`;
         }
 
-        // Función para compartir por WhatsApp
-        document.getElementById('shareWhatsApp').addEventListener('click', function() {
-            // Obtener datos del formulario (simulado para el ejemplo)
-            const parentName = "Juan Pérez"; // Esto vendría del formulario
-            const communityName = "Cumpleaños de María"; // Esto vendría del formulario
-            const communityId = generateUniqueId();
-            
-            // Construir el mensaje
-            const message = encodeURIComponent(
-                `${parentName} te está invitando a unirte a la comunidad "${communityName}" para agilizar la recaudación de fondos para eventos especiales. Únete aquí: https://werisemoney.com/comunidad/${communityId}`
-            );
-            
-            // Abrir WhatsApp con el mensaje
-            window.open(`https://wa.me/?text=${message}`, '_blank');
-        });
+        // Cerrar menú al hacer clic en un enlace
+        const navLinksElements = document.querySelectorAll('.nav-links a');
+        if (navLinksElements.length > 0) {
+            navLinksElements.forEach(link => {
+                link.addEventListener('click', () => {
+                    menuToggle.classList.remove('active');
+                    navLinks.classList.remove('active');
+                    body.classList.remove('menu-open');
+                });
+            });
+        }
     </script>
 </body>
 </html> 

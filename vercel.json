@@ -2,32 +2,12 @@
   "version": 2,
   "builds": [
     {
-      "src": "**/*.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "**/*.css",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "**/*.js",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "**/*.json",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "**/*.png",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "**/*.jpg",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "**/*.svg",
-      "use": "@vercel/static"
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": ".",
+        "buildCommand": "echo 'Building...'"
+      }
     }
   ],
   "routes": [
@@ -39,27 +19,39 @@
       "continue": true
     },
     {
-      "src": "/auth.html",
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/auth",
       "dest": "/auth.html"
     },
     {
-      "src": "/create-community.html",
+      "src": "/create-community",
       "dest": "/create-community.html"
     },
     {
-      "src": "/community-member.html",
+      "src": "/community-member",
       "dest": "/community-member.html"
     },
     {
-      "src": "/dashboard.html",
+      "src": "/dashboard",
       "dest": "/dashboard.html"
     },
     {
       "src": "/(.*)",
-      "dest": "/$1",
-      "headers": {
-        "cache-control": "public, max-age=0, must-revalidate"
-      }
+      "dest": "/$1.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
     }
   ]
 } 
